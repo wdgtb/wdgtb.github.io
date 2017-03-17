@@ -93,7 +93,7 @@
 <meta property="og:description" content="Eventbus2.X与Eventbus3对比1. 注册订阅者Eventbus3.0只有一个register方法
 1234567//3.0版本的注册EventBus.getDefault().register(this);//2.x版本的注册EventBus.getDefault().register(this);EventBus.getDefault().register(this, 100);">
 <meta property="og:image" content="http://omy7xaw7q.bkt.clouddn.com/1482833-9cf5e25b78b9f78e.jpeg">
-<meta property="og:updated_time" content="2017-03-17T09:53:08.000Z">
+<meta property="og:updated_time" content="2017-03-17T09:57:03.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Eventbus2.X迁移Eventbus3">
 <meta name="twitter:description" content="Eventbus2.X与Eventbus3对比1. 注册订阅者Eventbus3.0只有一个register方法
@@ -352,7 +352,7 @@
 <p>所以在Application或者自己有写AndroidEventBus之类的工具类的地方加上</p>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">EventBus.builder().addIndex(<span class="keyword">new</span> MyEventBusIndex()).installDefaultEventBus();</div></pre></td></tr></table></figure>
 <h4 id="1-使用android-apt"><a href="#1-使用android-apt" class="headerlink" title="1. 使用android-apt"></a>1. 使用android-apt</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div></pre></td><td class="code"><pre><div class="line">buildscript &#123;</div><div class="line">    repositories &#123;</div><div class="line">        jcenter()</div><div class="line">    &#125;</div><div class="line">    dependencies &#123;</div><div class="line">        classpath &apos;com.neenbedankt.gradle.plugins:android-apt:1.8&apos;</div><div class="line">    &#125;</div><div class="line">&#125;</div><div class="line"> </div><div class="line">apply plugin: &apos;com.neenbedankt.android-apt&apos;</div><div class="line"> </div><div class="line">dependencies &#123;</div><div class="line">    compile &apos;org.greenrobot:eventbus:3.0.0&apos;</div><div class="line">    apt &apos;org.greenrobot:eventbus-annotation-processor:3.0.1&apos;</div><div class="line">&#125;</div><div class="line"> </div><div class="line">apt &#123;</div><div class="line">    arguments &#123;</div><div class="line">        eventBusIndex &quot;com.example.myapp.MyEventBusIndex&quot;</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
-<p><a href="http://wdgtb.github.io/2017/03/16/annotationProcessor/">android-apt切换为官方annotationProcessor</a></p>
+<p><a href="https://wdgtb.github.io/2017/03/16/annotationProcessor/">android-apt切换为官方annotationProcessor</a></p>
 <h4 id="2-使用annotationProcessor"><a href="#2-使用annotationProcessor" class="headerlink" title="2. 使用annotationProcessor"></a>2. 使用annotationProcessor</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div></pre></td><td class="code"><pre><div class="line">android &#123;</div><div class="line">    defaultConfig &#123;</div><div class="line">        javaCompileOptions &#123;</div><div class="line">            annotationProcessorOptions &#123;</div><div class="line">                arguments = [ eventBusIndex : &apos;com.example.myapp.MyEventBusIndex&apos; ]</div><div class="line">            &#125;</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line">&#125;</div><div class="line"> </div><div class="line">dependencies &#123;</div><div class="line">    compile &apos;org.greenrobot:eventbus:3.0.0&apos;</div><div class="line">    annotationProcessor &apos;org.greenrobot:eventbus-annotation-processor:3.0.1&apos;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
 <p><code>com.example.myapp.MyEventBusIndex</code> 可以自己换</p>
 <h3 id="6-混淆"><a href="#6-混淆" class="headerlink" title="6. 混淆"></a>6. 混淆</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"># eventbus</div><div class="line">-keepclassmembers class * &#123;</div><div class="line">    public void onEvent*(**);</div><div class="line">&#125;</div></pre></td></tr></table></figure>
@@ -384,15 +384,15 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2017/03/16/annotationProcessor/" rel="next" title="android-apt切换为官方annotationProcessor">
-                <i class="fa fa-chevron-left"></i> android-apt切换为官方annotationProcessor
-              </a>
-            
           </div>
 
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2017/03/16/annotationProcessor/" rel="prev" title="android-apt切换为官方annotationProcessor">
+                android-apt切换为官方annotationProcessor <i class="fa fa-chevron-right"></i>
+              </a>
             
           </div>
         </div>

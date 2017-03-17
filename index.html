@@ -241,6 +241,138 @@
   
 
   <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+  <link itemprop="mainEntityOfPage" href="http://wdgtb.github.io/2017/03/16/annotationProcessor/">
+
+  <span style="display:none" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <meta itemprop="name" content="tianbao.gao">
+    <meta itemprop="description" content="">
+    <meta itemprop="image" content="/uploads/mio.png">
+  </span>
+
+  <span style="display:none" itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+    <meta itemprop="name" content="梦sora">
+    <span style="display:none" itemprop="logo" itemscope itemtype="http://schema.org/ImageObject">
+      <img style="display:none;" itemprop="url image" alt="梦sora" src="">
+    </span>
+  </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
+                <a class="post-title-link" href="/2017/03/16/annotationProcessor/" itemprop="url">
+                  android-apt切换为官方annotationProcessor
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2017-03-16T15:45:44+08:00">
+                2017-03-16
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+
+          
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h3 id="android-apt"><a href="#android-apt" class="headerlink" title="android-apt"></a><a href="https://bitbucket.org/hvisser/android-apt" target="_blank" rel="external">android-apt</a></h3><p>Android Gradle插件2.2版本发布后，Android 官方提供了<code>annotationProcessor</code>来代替<code>android-apt</code>，<code>annotationProcessor</code>同时支持 javac 和 jack 编译方式，而<code>android-apt</code>只支持 javac 方式。同时<code>android-apt</code>作者宣布不在维护，当然目前<code>android-apt</code>仍然可以正常运行，如果你没有想支持 jack 编译方式的话，可以继续使用 <code>android-apt</code>。</p>
+<h4 id="android-apt-切换-annotationProcessor-步骤"><a href="#android-apt-切换-annotationProcessor-步骤" class="headerlink" title="android-apt 切换 annotationProcessor 步骤"></a><code>android-apt</code> 切换 <code>annotationProcessor</code> 步骤</h4><ol>
+<li><p>Android Gradle 插件版本升级到 2.2 及以上<br>当前Android Studio已经升级到2.3版本</p>
+ <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">buildscript &#123;</div><div class="line">    repositories &#123;</div><div class="line">        jcenter()</div><div class="line">    &#125;</div><div class="line">    dependencies &#123;</div><div class="line">        classpath &apos;com.android.tools.build:gradle:2.3.0&apos;</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+</li>
+<li><p>删除<code>build.gradle</code> 文件中 <code>android-apt</code> 的相关配置</p>
+ <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">buildscript &#123;</div><div class="line">    repositories &#123;</div><div class="line">        jcenter()</div><div class="line">    &#125;</div><div class="line">    dependencies &#123;</div><div class="line">        classpath &apos;com.neenbedankt.gradle.plugins:android-apt:1.8&apos;</div><div class="line">    &#125;</div><div class="line">&#125;</div><div class="line">apply plugin: &apos;com.neenbedankt.android-apt&apos;</div></pre></td></tr></table></figure>
+</li>
+<li><p>改成新的依赖，<code>build.gradle</code>文件中使用<code>android-apt</code>引入的依赖修改为使用<code>annotationProcessor</code>，修改前配置如下：</p>
+ <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">dependencies &#123;</div><div class="line">  compile &apos;com.google.dagger:dagger:2.0&apos;</div><div class="line">  apt &apos;com.google.dagger:dagger-compiler:2.0&apos;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p> 修改后配置如下：</p>
+ <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">dependencies &#123;</div><div class="line">    compile &apos;com.google.dagger:dagger:2.0&apos;</div><div class="line">    annotationProcessor &apos;com.google.dagger:dagger-compiler:2.0&apos;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+</li>
+</ol>
+
+          
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
   <link itemprop="mainEntityOfPage" href="http://wdgtb.github.io/2017/03/16/eventbus3/">
 
   <span style="display:none" itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -353,144 +485,12 @@
 <p>所以在Application或者自己有写AndroidEventBus之类的工具类的地方加上</p>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">EventBus.builder().addIndex(<span class="keyword">new</span> MyEventBusIndex()).installDefaultEventBus();</div></pre></td></tr></table></figure>
 <h4 id="1-使用android-apt"><a href="#1-使用android-apt" class="headerlink" title="1. 使用android-apt"></a>1. 使用android-apt</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div></pre></td><td class="code"><pre><div class="line">buildscript &#123;</div><div class="line">    repositories &#123;</div><div class="line">        jcenter()</div><div class="line">    &#125;</div><div class="line">    dependencies &#123;</div><div class="line">        classpath &apos;com.neenbedankt.gradle.plugins:android-apt:1.8&apos;</div><div class="line">    &#125;</div><div class="line">&#125;</div><div class="line"> </div><div class="line">apply plugin: &apos;com.neenbedankt.android-apt&apos;</div><div class="line"> </div><div class="line">dependencies &#123;</div><div class="line">    compile &apos;org.greenrobot:eventbus:3.0.0&apos;</div><div class="line">    apt &apos;org.greenrobot:eventbus-annotation-processor:3.0.1&apos;</div><div class="line">&#125;</div><div class="line"> </div><div class="line">apt &#123;</div><div class="line">    arguments &#123;</div><div class="line">        eventBusIndex &quot;com.example.myapp.MyEventBusIndex&quot;</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
-<p><a href="http://wdgtb.github.io/2017/03/16/annotationProcessor/">android-apt切换为官方annotationProcessor</a></p>
+<p><a href="https://wdgtb.github.io/2017/03/16/annotationProcessor/">android-apt切换为官方annotationProcessor</a></p>
 <h4 id="2-使用annotationProcessor"><a href="#2-使用annotationProcessor" class="headerlink" title="2. 使用annotationProcessor"></a>2. 使用annotationProcessor</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div></pre></td><td class="code"><pre><div class="line">android &#123;</div><div class="line">    defaultConfig &#123;</div><div class="line">        javaCompileOptions &#123;</div><div class="line">            annotationProcessorOptions &#123;</div><div class="line">                arguments = [ eventBusIndex : &apos;com.example.myapp.MyEventBusIndex&apos; ]</div><div class="line">            &#125;</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line">&#125;</div><div class="line"> </div><div class="line">dependencies &#123;</div><div class="line">    compile &apos;org.greenrobot:eventbus:3.0.0&apos;</div><div class="line">    annotationProcessor &apos;org.greenrobot:eventbus-annotation-processor:3.0.1&apos;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
 <p><code>com.example.myapp.MyEventBusIndex</code> 可以自己换</p>
 <h3 id="6-混淆"><a href="#6-混淆" class="headerlink" title="6. 混淆"></a>6. 混淆</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"># eventbus</div><div class="line">-keepclassmembers class * &#123;</div><div class="line">    public void onEvent*(**);</div><div class="line">&#125;</div></pre></td></tr></table></figure>
 <p>改为</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line"># eventbus</div><div class="line">-keepattributes *Annotation*</div><div class="line">-keepclassmembers class ** &#123;</div><div class="line">    @org.greenrobot.eventbus.Subscribe &lt;methods&gt;;</div><div class="line">&#125;</div><div class="line">-keep enum org.greenrobot.eventbus.ThreadMode &#123; *; &#125;</div><div class="line"> </div><div class="line"># Only required if you use AsyncExecutor</div><div class="line">-keepclassmembers class * extends org.greenrobot.eventbus.util.ThrowableFailureEvent &#123;</div><div class="line">    &lt;init&gt;(java.lang.Throwable);</div><div class="line">&#125;</div></pre></td></tr></table></figure>
-
-          
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-  <link itemprop="mainEntityOfPage" href="http://wdgtb.github.io/2017/03/16/annotationProcessor/">
-
-  <span style="display:none" itemprop="author" itemscope itemtype="http://schema.org/Person">
-    <meta itemprop="name" content="tianbao.gao">
-    <meta itemprop="description" content="">
-    <meta itemprop="image" content="/uploads/mio.png">
-  </span>
-
-  <span style="display:none" itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-    <meta itemprop="name" content="梦sora">
-    <span style="display:none" itemprop="logo" itemscope itemtype="http://schema.org/ImageObject">
-      <img style="display:none;" itemprop="url image" alt="梦sora" src="">
-    </span>
-  </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-            
-            
-              
-                
-                <a class="post-title-link" href="/2017/03/16/annotationProcessor/" itemprop="url">
-                  android-apt切换为官方annotationProcessor
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2017-03-16T15:45:44+08:00">
-                2017-03-16
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-          
-
-          
-
-          
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h3 id="android-apt"><a href="#android-apt" class="headerlink" title="android-apt"></a><a href="https://bitbucket.org/hvisser/android-apt" target="_blank" rel="external">android-apt</a></h3><p>Android Gradle插件2.2版本发布后，Android 官方提供了<code>annotationProcessor</code>来代替<code>android-apt</code>，<code>annotationProcessor</code>同时支持 javac 和 jack 编译方式，而<code>android-apt</code>只支持 javac 方式。同时<code>android-apt</code>作者宣布不在维护，当然目前<code>android-apt</code>仍然可以正常运行，如果你没有想支持 jack 编译方式的话，可以继续使用 <code>android-apt</code>。</p>
-<h4 id="android-apt-切换-annotationProcessor-步骤"><a href="#android-apt-切换-annotationProcessor-步骤" class="headerlink" title="android-apt 切换 annotationProcessor 步骤"></a><code>android-apt</code> 切换 <code>annotationProcessor</code> 步骤</h4><ol>
-<li><p>Android Gradle 插件版本升级到 2.2 及以上<br>当前Android Studio已经升级到2.3版本</p>
- <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">buildscript &#123;</div><div class="line">    repositories &#123;</div><div class="line">        jcenter()</div><div class="line">    &#125;</div><div class="line">    dependencies &#123;</div><div class="line">        classpath &apos;com.android.tools.build:gradle:2.3.0&apos;</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
-</li>
-<li><p>删除<code>build.gradle</code> 文件中 <code>android-apt</code> 的相关配置</p>
- <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">buildscript &#123;</div><div class="line">    repositories &#123;</div><div class="line">        jcenter()</div><div class="line">    &#125;</div><div class="line">    dependencies &#123;</div><div class="line">        classpath &apos;com.neenbedankt.gradle.plugins:android-apt:1.8&apos;</div><div class="line">    &#125;</div><div class="line">&#125;</div><div class="line">apply plugin: &apos;com.neenbedankt.android-apt&apos;</div></pre></td></tr></table></figure>
-</li>
-<li><p>改成新的依赖，<code>build.gradle</code>文件中使用<code>android-apt</code>引入的依赖修改为使用<code>annotationProcessor</code>，修改前配置如下：</p>
- <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">dependencies &#123;</div><div class="line">  compile &apos;com.google.dagger:dagger:2.0&apos;</div><div class="line">  apt &apos;com.google.dagger:dagger-compiler:2.0&apos;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
-<p> 修改后配置如下：</p>
- <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">dependencies &#123;</div><div class="line">    compile &apos;com.google.dagger:dagger:2.0&apos;</div><div class="line">    annotationProcessor &apos;com.google.dagger:dagger-compiler:2.0&apos;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
-</li>
-</ol>
 
           
         
